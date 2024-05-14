@@ -4,3 +4,6 @@
 [submodule "swap-microbenchmarks/mmapbench"]
 	path = swap-microbenchmarks/mmapbench
 	url = git@github.com:SepehrDV2/mmap-anon-benchmarks.git
+[submodule "linux"]
+	path = linux
+	url = git@github.com:SepehrDV2/linux.git

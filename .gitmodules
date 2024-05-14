@@ -1,0 +1,6 @@
+[submodule "swap-benchmarks/gapbs"]
+	path = swap-benchmarks/gapbs
+	url = git@github.com:SepehrDV2/gapbs.git
+[submodule "swap-microbenchmarks/mmapbench"]
+	path = swap-microbenchmarks/mmapbench
+	url = git@github.com:SepehrDV2/mmap-anon-benchmarks.git

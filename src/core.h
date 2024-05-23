@@ -51,7 +51,9 @@ extern "C" {
 //#define USWAP_UFFD
 
 //#define POPULATE_ALL
+#ifndef PAGE_RANK
 #define TRY_PREFAULT
+#endif
 #define TRY_PREFETCH
 
 extern uint64_t dramsize;

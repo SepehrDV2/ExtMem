@@ -1,9 +1,10 @@
 
+
 # ExtMem
 
 ExtMem is a framework for user level memory management. ExtMem is implemented as a user-space library that attaches to applications. The current version supports memory paging (swap) and eviction and prefetching policies based on page table access bits. See the publication for details.
 
-This repo contains our artifact for the ATC'24 paper. Follow the instructions in this doc to reproduce the paper results. 
+This repository contains our artifact for the ATC'24 paper. Follow the instructions in this doc to reproduce the paper results. 
 
 ### Publications
 Jalalian, S., Patel, S., Rezaei Hajidehi, M., Seltzer, M., & Fedorova, A. (2024). ExtMem: Enabling Application-Aware virtual memory management. In  _Usenix Annual Technical Conference_ 2024.
@@ -74,11 +75,57 @@ Running PageRank:
 
     DRAMSIZE=8589934592 SWAPPATH=/dev/nvme1n1p2 LD_PRELOAD=/path/to/libextmem-pagerank.so ./pr -f ../datasets/twitter/snap.el
 
+## Reproducing paper results
 
+Once you built the library and mmapbench and gapbs, you can use the scripts provided in the run-scripts directory to recreate the results in the paper.
+
+Preparing:
+
+    cd run-scripts
+    ./build-extmem.sh
+    ./build-microbenchmarks.sh
+    ./build-pagerank.sh
+  
+
+mmapbench
+(~45 minutes runtime time to get results, ~15 minutes to run commands and interpret results)
+
+You can run these scripts to reproduce mmapbench experiment results:
+
+    sudo ./run-mmapbench.sh # generate extmem results
+    sudo ./run-mmapbench-baseline.sh # generate Linux cgroup results
+
+Each will take ~30 minutes to run. They would require root privilege to change the swap device. This will generate a set of csv log files showing the throughput per second. To interpret these files, fifth columns is time and sixth column is throughput. You can use the python scripts provided to generate each of the figures in section 4.2.
+
+    python3 random-plot.py
+    python3 sequential-plot.py
+    python3 workingset-plot.py
+
+gapbs
+(~15 minutes preparation time, ~1.5 hour runtime)
+
+To reproduce the experiment in the paper. First prepare the Twitter dataset:
+
+    prepare-tw-dataset.sh
+
+This will download and extract the dataset files in run-scripts/twitter_compressed
+snap.el is the graph file used in gap.
+
+Then run the experiments:
+
+    sudo ./run-pr.sh # run with both extmem default and pagerank
+    sudo ./run-pre-baseline.sh # in-memory and cgroup limits
+
+  
+
+Each of these will read the dataset, build the graph, and run the iterations. The iterations time will appear on output, showing the timing results section 4.3. Note that the graph building phase is time consuming (~20 minutes each experiment) so give it time before iterations begin.
 
 ## Acknowledgment
-Some parts of this implementation were derived from [hemem](https://bitbucket.org/ajaustin/hemem/src). We have used the high level structure, syscall interception code and also some utilities from their codebase. We also adopted some of their kernel patches for userfaultfd interface in our kernel tree. 
+Some parts of this implementation were derived from [hemem](https://bitbucket.org/ajaustin/hemem/src). We have adopted their API, syscall interception code and also some utilities from their codebase. We also adopted some of their kernel patches for userfaultfd interface in our kernel tree. 
  
 ## Contact
 Sepehr Jalalian (Sepehr.jalalian.edu@gmail.com)
+
+
+
 

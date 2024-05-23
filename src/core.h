@@ -167,7 +167,7 @@ struct user_page {
   struct user_page *reserve;
   UT_hash_handle hh;
   struct user_page *next, *prev;
-  struct fifo_list *list;
+  volatile struct fifo_list *list;
 };
 
 static inline uint64_t pt_to_pagesize(enum pagetypes pt)

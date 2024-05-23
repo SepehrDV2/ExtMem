@@ -301,7 +301,7 @@ static int shrink_active_list(uint64_t nr_pages)
       assert(page != NULL);
       // sample presentation method
       page->naccesses = 0;
-      //extmem_clear_accessed_flag(page);
+      //pt_clear_accessed_flag(page);
       enqueue_fifo(&inactive_list, page);
       //LOGPOLICY("shrink_active_list: page %lu examined and moved to inactive list\n", (uint64_t)(page->va - main_mmap)/ PAGE_SIZE);
       ret++;
@@ -347,7 +347,7 @@ static int shrink_inactive_list(uint64_t nr_pages)
           // page has been accessed,
           // put it back
           page->naccesses++;
-          extmem_clear_accessed_flag(page);
+          pt_clear_accessed_flag(page);
 
           if(page->naccesses > 1){
             page->naccesses = 0;

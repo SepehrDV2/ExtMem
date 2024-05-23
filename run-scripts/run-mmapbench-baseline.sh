@@ -8,21 +8,21 @@ export SWAPDIR="/dev/nvme1n1p2" # swap path, change according to your system, no
 
 # prepare the swap partition
 swapoff -a
-mkswap SWAPDIR
-swapon SWAPDIR # just in case it was used in baseline
+mkswap $SWAPDIR
+swapon $SWAPDIR # just in case it was used in baseline
 
 # create the cgroup limit
 # Check if the cgroup already exists
 if [ ! -d "/sys/fs/cgroup/memory/mmapbench" ]; then
     # Create the cgroup if it doesn't exist
-    sudo sudo cgcreate -g memory:/mmapbench
+    cgcreate -g memory:/mmapbench
     echo "Created new cgroup: memory/mmapbench"
 else
     echo "Using existing Cgroup memory/mmapbench"
 fi
 
 #sudo cgcreate -g memory:/mmapbench
-echo DRAMSIZE > /sys/fs/cgroup/memory/mmapbench/memory.limit_in_bytes
+echo $DRAMSIZE > /sys/fs/cgroup/memory/mmapbench/memory.limit_in_bytes
 
 # Define the range of num_threads
 start_threads=1

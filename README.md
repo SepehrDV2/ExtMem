@@ -15,13 +15,14 @@ Clone this repository and set up its submodules.
 
     git clone git@github.com:SepehrDV2/ExtMem.git
     cd ExtMem
-    git submodule --init
+    git submodule update --init
 
 
 You need to build and install the provided custom kernel for the best results. Then build and install the kernel inside Linux directory. ExtMem also needs the custom kernel headers. Follow any Linux installation guide for dependencies.
 
     cd linux
-    make defconfig # assuming X86, use menuconfig to customize if needed
+    make oldconfig # assuming X86
+    make menuconfig # ensure userfaultfd and uring are enabled
     make -j $(nproc)
     sudo make headers_install INSTALL_HDR_PATH=usr/include # important, we put headers in the source file
     # next steps install the actual kernel on your machine
@@ -74,8 +75,6 @@ Running PageRank:
     DRAMSIZE=8589934592 SWAPPATH=/dev/nvme1n1p2 LD_PRELOAD=/path/to/libextmem-pagerank.so ./pr -f ../datasets/twitter/snap.el
 
 
-
-## Reproducing paper results
 
 ## Acknowledgment
 Some parts of this implementation were derived from [hemem](https://bitbucket.org/ajaustin/hemem/src). We have used the high level structure, syscall interception code and also some utilities from their codebase. We also adopted some of their kernel patches for userfaultfd interface in our kernel tree. 

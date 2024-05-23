@@ -521,21 +521,36 @@ int extmem_munmap(void* addr, size_t length)
   LOG("extmem_munmap(%p, %lu)\n", addr, length);
   
   //pthread_mutex_lock(handler_lock);
+  pthread_mutex_lock(&allocator_lock);
 
   // TODO: fix races between munmap and policy
-  //pthread_mutex_lock(&allocator_lock);
   // for each page in region specified...
   for (page_boundry = (uint64_t)addr; page_boundry < (uint64_t)addr + length;) {
     // find the page in extmem's tracking list
     page = find_page(page_boundry);
     if (page != NULL) {
-      // remove page from extmem's and policy's list
+      // remove page from hash and policy's list
+      pthread_mutex_lock(&handler_lock);
+      if(page->migrating == true){ // being handled
+        pthread_mutex_unlock(&handler_lock);
+      //LOG("munmap: waiting for migration for page %lx\n", page_boundry);
+      
+        while (page->migrating);  // release the lock, busy wait and retry
+        pthread_mutex_lock(&handler_lock);
+      
+      }
+      page->migrating = true;
+      pthread_mutex_unlock(&handler_lock);
+
       remove_page(page);
       mmgr_remove(page);
 
       mem_allocated -= pt_to_pagesize(page->pt);
       mem_mmaped -= pt_to_pagesize(page->pt);
       pages_freed++;
+      //pthread_mutex_lock(&handler_lock);
+      //page->migrating = false;
+      //pthread_mutex_unlock(&handler_lock);
 
       // move to next page
       page_boundry += pt_to_pagesize(page->pt);
@@ -552,7 +567,7 @@ int extmem_munmap(void* addr, size_t length)
     perror("libc munmap: ");
     assert(0);
   }
-  //pthread_mutex_unlock(&allocator_lock);
+  pthread_mutex_unlock(&allocator_lock);
   
   internal_call = false;
 
@@ -1580,6 +1595,15 @@ int core_try_prefetch(uint64_t base_boundry)
         ret = -1;
         continue;
       }
+    }
+    if(page->va != old_va){ // something has changed, quit
+       
+        pthread_mutex_unlock(&handler_lock); // release the lock and return
+        //fprintf(stderr, "Page VA had changed before prefetching\n");
+    
+        ret = -1;
+        continue;
+
 
     }
     // if we reach here means we will handle this
@@ -1589,6 +1613,7 @@ int core_try_prefetch(uint64_t base_boundry)
     pthread_mutex_unlock(&handler_lock);
 
     // detach the page from its list
+    assert(page->va != 0);
     policy_detach_page(page);
     prefetch_list[nr_prefetch] = page;
     nr_prefetch++;

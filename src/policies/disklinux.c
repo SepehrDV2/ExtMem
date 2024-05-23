@@ -1154,9 +1154,6 @@ void lrudisk_remove_page(struct user_page *page)
 {
   struct fifo_list *list;
   int ret = 0;
-  // wait for kscand thread to complete its scan
-  // this is needed to avoid race conditions with kscand thread
-  while (in_kscand);
   
   //pthread_mutex_lock(&policy_lock);
  
@@ -1164,7 +1161,7 @@ void lrudisk_remove_page(struct user_page *page)
   // user program must have had a read-after-free problem.
   // if it is being swapped out, then nobody should be swapping it in
   assert(page != NULL);
-  while(page->migrating == true);
+  //while(page->migrating == true);
 
   // racy part, use locks to solve this later
   page->migrating = true;

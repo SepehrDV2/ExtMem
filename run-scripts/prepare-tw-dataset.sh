@@ -14,4 +14,5 @@ tar -xzvf "${TWITTER_ARCHIVE}"
 echo "Remove compressed archive"
 rm -rf "${TWITTER_ARCHIVE}"
 
+mv twitter_compressed/snap.txt twitter_compressed/snap.el
 echo "Download complete"

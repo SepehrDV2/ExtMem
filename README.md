@@ -75,7 +75,11 @@ Running PageRank:
 
     DRAMSIZE=8589934592 SWAPPATH=/dev/nvme1n1p2 LD_PRELOAD=/path/to/libextmem-pagerank.so ./pr -f ../datasets/twitter/snap.el
 
+## Hardware Requirements
+Given a dedicated swap file ExtMem can run on any multi-core X86 machine that can run the Linux 5.15>= kernel. 
+For the best performance we recommend a dedicated NVMe SSD partition with async IO and at least 16 cores. 
 ## Reproducing paper results
+The experiments were run on a 2-socket machine (16 cores, 32 hardware threads each) with 2.30GHz Intel Xeon 5218 processors and 198GB of DDR4 DRAM, running a modified Linux 5.15. We used an NVMe SSD disk with 2700MB/S read rate. We recommend using similar hardware for reproducing paper results. 
 
 Once you built the library and mmapbench and gapbs, you can use the scripts provided in the run-scripts directory to recreate the results in the paper.
 

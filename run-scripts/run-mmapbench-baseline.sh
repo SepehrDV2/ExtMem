@@ -31,7 +31,7 @@ end_threads=32
 # random update 
 for ((threads=start_threads; threads<=end_threads; threads*=2)); do
   # Run the mmapbench command and redirect the output to a log file
-  cgexec -g memory:mmapbench timeout 180s ../swap-microbenchmarks/mmapbench/mmapbench /dev/null "$threads" 1 0 0 1 > "cgroup-ran-write-$threads-threads.log"
+  cgexec -g memory:mmapbench timeout 180s ../swap-microbenchmarks/mmapbench/mmapbench /dev/null "$threads" 1 0 0 1 > "cgroup-rand-write-$threads-threads.log"
 done
 
 # sequential update         

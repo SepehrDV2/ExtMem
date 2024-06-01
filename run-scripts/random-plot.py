@@ -13,7 +13,7 @@ def calculate_average_throughput(file_path):
 
 def read_throughput_files(directory):
     throughputs = {}
-    file_pattern = re.compile(r'^(?P<system_name>[\w]+)-ran-write-(?P<threads>\d+)-threads\.log$')
+    file_pattern = re.compile(r'^(?P<system_name>[\w]+)-rand-write-(?P<threads>\d+)-threads\.log$')
     for file_name in os.listdir(directory):
         match = file_pattern.match(file_name)
         if match:

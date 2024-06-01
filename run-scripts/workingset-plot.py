@@ -10,7 +10,7 @@ sns.set(style="whitegrid")
 # "extmem-workingset-write-8-threads.log"
 
 # List of system names
-system_names = ['linux', 'extmem']
+system_names = ['cgroup', 'extmem']
 
 # List to store throughput data for each system
 throughput_data = []

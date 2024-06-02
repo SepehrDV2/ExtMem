@@ -26,7 +26,7 @@ echo $DRAMSIZE > /sys/fs/cgroup/memory/mmapbench/memory.limit_in_bytes
 
 # Define the range of num_threads
 start_threads=1
-end_threads=32
+end_threads=16
 
 # random update 
 for ((threads=start_threads; threads<=end_threads; threads*=2)); do

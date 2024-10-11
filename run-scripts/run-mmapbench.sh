@@ -10,7 +10,7 @@ export SWAPDIR="/dev/nvme1n1p2" # swap path, change according to your system, no
 swapoff $SWAPDIR # just in case it was used in baseline
 # Define the range of num_threads
 start_threads=1
-end_threads=32
+end_threads=16
 
 
 # run random update 

@@ -8,7 +8,7 @@ def calculate_average_throughput(file_path):
     # Read CSV file, skip first two rows (headers)
     df = pd.read_csv(file_path, skiprows=2)
     # Calculate average of throughput column (7th column)
-    avg_throughput = df.iloc[:, 6].mean()
+    avg_throughput = df.iloc[:, 5].mean()
     return avg_throughput
 
 def read_throughput_files(directory):

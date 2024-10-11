@@ -26,18 +26,18 @@ echo $DRAMSIZE > /sys/fs/cgroup/memory/mmapbench/memory.limit_in_bytes
 
 # Define the range of num_threads
 start_threads=1
-end_threads=32
+end_threads=16
 
 # random update 
 for ((threads=start_threads; threads<=end_threads; threads*=2)); do
   # Run the mmapbench command and redirect the output to a log file
-  cgexec -g memory:mmapbench timeout 180s ../swap-microbenchmarks/mmapbench/mmapbench /dev/null "$threads" 1 0 0 1 > "cgroup-ran-write-$threads-threads.log"
+  cgexec -g memory:mmapbench timeout 180s ../swap-microbenchmarks/mmapbench/mmapbench /dev/null "$threads" 1 0 0 1 > "cgroup-rand-write-$threads-threads.log"
 done
 
 # sequential update         
 for ((threads=start_threads; threads<=end_threads; threads*=2)); do
   # Run the mmapbench command and redirect the output to a log file
-  cgexec -g memory:mmapbench timeout 180s ../swap-microbenchmarks/mmapbench/mmapbench /dev/null "$threads" 1 0 0 1 > "cgroup-seq-write-$threads-threads.log"
+  cgexec -g memory:mmapbench timeout 180s ../swap-microbenchmarks/mmapbench/mmapbench /dev/null "$threads" 0 0 0 1 > "cgroup-seq-write-$threads-threads.log"
 done
 
 

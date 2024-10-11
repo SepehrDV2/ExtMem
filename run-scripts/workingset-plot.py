@@ -1,7 +1,7 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-import scienceplots
+#import scienceplots
 
 # Set Seaborn style
 sns.set(style="whitegrid")
@@ -10,7 +10,7 @@ sns.set(style="whitegrid")
 # "extmem-workingset-write-8-threads.log"
 
 # List of system names
-system_names = ['linux', 'extmem']
+system_names = ['cgroup', 'extmem']
 
 # List to store throughput data for each system
 throughput_data = []
@@ -18,8 +18,8 @@ throughput_data = []
 # Loop through each system
 for system_name in system_names:
     # Read the CSV file
-    file_path = f"{system_name}-workingset-write-8-threads.csv"
-    df = pd.read_csv(file_path, header=None, names=['device', 'col1', 'col2', 'col3', 'timestamp', 'throughput', 'col6', 'col7', 'col8', 'col9'])
+    file_path = f"{system_name}-workingset-write-8-threads.log"
+    df = pd.read_csv(file_path, header=0, names=['device', 'col1', 'col2', 'col3', 'timestamp', 'throughput', 'col6', 'col7', 'col8', 'col9'])
     df['throughput'] = df['throughput'] * (1024*1024*1024) / (4096*1000*1000)
     # Store DataFrame with throughput and timestamp data for each system
     throughput_data.append(df[['timestamp', 'throughput']])

@@ -21,6 +21,9 @@ Clone this repository and set up its submodules.
 
 You need to build and install the provided custom kernel for the best results. Then build and install the kernel inside Linux directory. ExtMem also needs the custom kernel headers. Follow any Linux installation guide for dependencies.
 
+    # basic dependencies
+    sudo apt install bc binutils bison dwarves flex gcc git gnupg2 gzip libelf-dev libncurses5-dev libssl-dev make openssl pahole perl-base rsync tar xz-utils
+    sudo apt install liburing-dev liburing2 # io_uring library
     cd linux
     make oldconfig # assuming X86
     make menuconfig # ensure userfaultfd and uring are enabled
